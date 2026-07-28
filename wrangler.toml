@@ -1,0 +1,22 @@
+# MCP Personal Style Assistant — Cloudflare Workers configuration
+name = "mcp-style-assistant"
+main = "src/index.ts"
+compatibility_date = "2025-07-28"
+
+# Free tier: 100k requests/day, plenty for personal use + a few friends
+# To bind a custom domain, uncomment below:
+# routes = [{ pattern = "mcp.yourdomain.com", custom_domain = true }]
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "MCP_KV"
+id = "your-kv-namespace-id"
+preview_id = "your-kv-preview-id"
+
+[vars]
+# Comma-separated list of allowed API keys
+# After deploy, update via Cloudflare Dashboard → Workers → Settings → Variables
+# For local dev, override with .dev.vars
+# ALLOWED_API_KEYS = "sk-your-key-1,sk-your-key-2"

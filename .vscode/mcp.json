@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "style-assistant-local": {
+      "type": "url",
+      "url": "http://127.0.0.1:8787/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:STYLE_ASSISTANT_API_KEY}"
+      }
+    }
+  }
+}
