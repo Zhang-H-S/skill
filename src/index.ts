@@ -23,6 +23,7 @@ interface StylePreference {
 }
 
 const STYLE_PREFERENCES: StylePreference[] = [
+  // ── General ─────────────────────────────────────────────────────────
   {
     language: "General",
     rules: [
@@ -31,34 +32,115 @@ const STYLE_PREFERENCES: StylePreference[] = [
       "Use meaningful variable names, avoid abbreviations",
       "Handle errors explicitly, never swallow exceptions",
       "Comments explain 'why', not 'what'",
+      "2 spaces for indentation",
+      "Semicolons required",
+      "Single quotes for strings",
+      "camelCase for variables and functions",
+      "PascalCase for classes, interfaces, and types",
+      "kebab-case for CSS class selectors",
+      "snake_case for static file names (images, configs, etc.)",
     ],
   },
+
+  // ── TypeScript / JavaScript ─────────────────────────────────────────
   {
     language: "TypeScript",
     rules: [
-      "Prefer interface over type (use type for unions)",
-      "Enable strict mode",
+      "Prefer interface over type (use type for unions or mapped types)",
+      "Enable strict mode in tsconfig",
       "Use async/await, avoid raw Promise chains",
       "Use Zod / Standard Schema for external input validation",
-      "Export named functions, avoid default exports",
+      "Export named functions (for utilities, helpers, APIs)",
+      "Use `import type` for type-only imports",
+      "No `any` — prefer `unknown` and narrow with guards",
+      "Use `const` assertions for literal types",
     ],
   },
+
+  // ── React / Next.js ─────────────────────────────────────────────────
   {
     language: "React",
     rules: [
       "Prefer function components + Hooks",
       "Keep components pure/presentational, extract logic into custom Hooks",
-      "Use Tailwind CSS or CSS Modules, avoid CSS-in-JS",
-      "Define Props with interface, place at the top of the component file",
+      "Use Tailwind CSS, avoid CSS-in-JS",
+      "Define Props with interface, place at the top of the file",
+      "Default import for components, named import for hooks/utils",
+      "Use React Server Components by default in Next.js",
+      "'use client' only when interactivity is needed",
     ],
   },
+
+  // ── Vue / Nuxt ──────────────────────────────────────────────────────
   {
-    language: "Python",
+    language: "Vue",
     rules: [
-      "Use type hints everywhere",
-      "Follow PEP 8, format with ruff",
-      "Prefer dataclass / Pydantic for data structures",
-      "Use pathlib for filesystem paths",
+      "Use Composition API with <script setup lang='ts'>",
+      "Default import for components",
+      "Use `defineProps` / `defineEmits` with type annotations",
+      "Extract reusable logic into composables",
+      "Use Pinia for state management",
+      "Single-File Components (.vue) for all components",
+    ],
+  },
+
+  // ── SolidJS ─────────────────────────────────────────────────────────
+  {
+    language: "SolidJS",
+    rules: [
+      "Use signals and effects, avoid classes and 'this'",
+      "Prefer `createSignal` over mutable state",
+      "Use `For` / `Show` control flow components instead of .map() / &&",
+      "Default import for components",
+      "Keep component logic in primitives (custom hooks)",
+    ],
+  },
+
+  // ── Astro ───────────────────────────────────────────────────────────
+  {
+    language: "Astro",
+    rules: [
+      "Use `---` frontmatter for server-side logic",
+      "Minimal client JS — use client:* directives sparingly",
+      "Colocate components with their Astro pages when possible",
+      "Prefer `.astro` over `.mdx` for content-heavy pages with custom layout",
+    ],
+  },
+
+  // ── Node.js / Bun (Hono, Express, Nest) ─────────────────────────────
+  {
+    language: "Node.js",
+    rules: [
+      "Use Hono for new projects (lightweight, fast, CF Workers compatible)",
+      "Organize by feature (not by file type)",
+      "Use middleware for cross-cutting concerns (auth, logging, validation)",
+      "Handle all errors through a centralized error handler",
+      "Use environment variables for all configuration",
+      "Named imports for utilities and middleware",
+    ],
+  },
+
+  // ── Go ──────────────────────────────────────────────────────────────
+  {
+    language: "Go",
+    rules: [
+      "Use `go fmt` before every commit",
+      "Prefer composition over inheritance (interfaces, embedding)",
+      "Return errors explicitly, avoid panics",
+      "Use `errgroup` for concurrent operations",
+      "Keep package scope minimal — export only what's needed",
+    ],
+  },
+
+  // ── CSS / Tailwind ──────────────────────────────────────────────────
+  {
+    language: "CSS",
+    rules: [
+      "Use Tailwind utility classes as the primary approach",
+      "Use CSS Modules for complex custom styles that Tailwind can't cover",
+      "kebab-case for custom CSS class selectors",
+      "Use CSS custom properties (variables) for theme values",
+      "Avoid !important at all costs",
     ],
   },
 ];
