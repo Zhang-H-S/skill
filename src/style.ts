@@ -46,7 +46,7 @@ export const STYLE_PREFERENCES: StylePreference[] = [
     rules: [
       'Always use TypeScript over plain JS for any serious project',
       "strict: false in tsconfig is acceptable — pragmatism over purity",
-      'Use `any` when the type is too complex or from an external API — but prefer basic types when possible',
+      'Prefer concrete types. `any` is a lazy escape hatch — use it sparingly and only when the shape is truly dynamic',
       'Priority for type representation: union types > enums > plain string',
       'Prefer `interface` over `type` (use `type` for unions and mapped types)',
     ],
@@ -129,7 +129,7 @@ export const STYLE_PREFERENCES: StylePreference[] = [
     rules: [
       'Prefer function components + Hooks. Avoid class components',
       'Keep components pure/presentational, extract logic into custom hooks',
-      'Use UnoCSS or Tailwind, avoid CSS-in-JS',
+      'Use Tailwind, avoid CSS-in-JS',
       'Define Props with interface, place at the top of the file',
       'Default import for components, named import for hooks/utils',
     ],
@@ -138,10 +138,11 @@ export const STYLE_PREFERENCES: StylePreference[] = [
     category: 'Language',
     language: 'Style & CSS',
     rules: [
-      'Use UnoCSS utility classes in templates as the primary styling approach',
+      'Use Tailwind 4 utility classes in templates as the primary styling approach',
+      'Configure Tailwind via CSS (@import "tailwindcss") rather than JS config file',
       'Use scoped SCSS for complex custom styles that utilities cannot cover',
       'PC/Mobile responsive design: toggle a root class (.pc / .mobile) and nest styles',
-      'Use vw units for responsive sizing. CSS custom properties for theme tokens',
+      'Use vw / rem for responsive sizing. CSS custom properties for theme tokens',
       'Nested SCSS selectors are welcome (.parent { .child { } }). Avoid !important',
       'Background images via CSS background-image with contain/cover',
     ],
