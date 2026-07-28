@@ -6,11 +6,11 @@
  * Style data lives in ./style.ts.
  */
 
-import { createMcpHonoApp } from '@modelcontextprotocol/hono';
-import { createMcpHandler } from '@modelcontextprotocol/server';
-import type { Context } from 'hono';
-import { createServer } from './server.js';
-import { STYLE_PREFERENCES } from './style.js';
+import { createMcpHonoApp } from "@modelcontextprotocol/hono";
+import { createMcpHandler } from "@modelcontextprotocol/server";
+import type { Context } from "hono";
+import { createServer } from "./server.js";
+import { STYLE_PREFERENCES } from "./style.js";
 
 // ============================================================================
 // API Key authentication
@@ -23,7 +23,7 @@ function getAllowedKeys(): Set<string> {
   if (!raw) return new Set();
   return new Set(
     raw
-      .split(',')
+      .split(",")
       .map(k => k.trim())
       .filter(Boolean),
   );
@@ -36,10 +36,10 @@ async function verifyToken(
 
   // No keys configured = bypass auth (local dev mode)
   if (allowedKeys.size === 0) {
-    return { clientId: 'anonymous', token: '', scopes: [] };
+    return { clientId: "anonymous", token: "", scopes: [] };
   }
 
-  const auth = request.headers.get('Authorization');
+  const auth = request.headers.get("Authorization");
   if (!auth) return null;
 
   const match = auth.match(/^Bearer\s+(.+)$/i);
@@ -64,13 +64,13 @@ const app = createMcpHonoApp();
 const handler = createMcpHandler(() => createServer());
 
 // Mount MCP endpoint with API Key authentication
-app.all('/mcp', async (c: Context) => {
+app.all("/mcp", async (c: Context) => {
   const authInfo = await verifyToken(c.req.raw);
   if (!authInfo) {
     return c.json(
       {
         error:
-          'Unauthorized — provide a valid Bearer token in the Authorization header',
+          "Unauthorized — provide a valid Bearer token in the Authorization header",
       },
       401,
     );
@@ -78,18 +78,18 @@ app.all('/mcp', async (c: Context) => {
 
   return handler.fetch(c.req.raw, {
     authInfo,
-    parsedBody: c.get('parsedBody'),
+    parsedBody: c.get("parsedBody"),
   });
 });
 
 // Health check endpoint (no auth required)
-app.get('/health', (c: Context) => {
+app.get("/health", (c: Context) => {
   return c.json({
-    status: 'ok',
-    server: 'style-assistant',
-    version: '1.0.0',
+    status: "ok",
+    server: "style-assistant",
+    version: "1.0.0",
     categories: Object.fromEntries(
-      (['General', 'Business', 'Language'] as const).map(cat => [
+      (["General", "Business", "Language"] as const).map(cat => [
         cat,
         STYLE_PREFERENCES.filter(p => p.category === cat).map(p => p.language),
       ]),
@@ -98,13 +98,13 @@ app.get('/health', (c: Context) => {
 });
 
 // Root endpoint shows basic info
-app.get('/', (c: Context) => {
+app.get("/", (c: Context) => {
   return c.json({
-    name: 'MCP Style Assistant',
-    description: 'Personalized coding assistant MCP server',
-    endpoint: '/mcp',
-    health: '/health',
-    docs: 'https://modelcontextprotocol.io/docs',
+    name: "MCP Style Assistant",
+    description: "Personalized coding assistant MCP server",
+    endpoint: "/mcp",
+    health: "/health",
+    docs: "https://modelcontextprotocol.io/docs",
   });
 });
 

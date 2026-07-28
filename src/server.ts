@@ -2,14 +2,14 @@
  * MCP server factory — registers all tools, resources, and prompts
  */
 
-import { McpServer } from '@modelcontextprotocol/server';
-import * as z from 'zod/v4';
-import { STYLE_PREFERENCES, formatStyleGuide } from './style.js';
+import { McpServer } from "@modelcontextprotocol/server";
+import * as z from "zod/v4";
+import { STYLE_PREFERENCES, formatStyleGuide } from "./style.js";
 
 export function createServer(): McpServer {
   const server = new McpServer({
-    name: 'style-assistant',
-    version: '1.0.0',
+    name: "style-assistant",
+    version: "1.0.0",
   });
 
   // ------------------------------------------------------------------
@@ -17,17 +17,17 @@ export function createServer(): McpServer {
   // ------------------------------------------------------------------
 
   server.registerResource(
-    'coding-style',
-    'style://preferences',
+    "coding-style",
+    "style://preferences",
     {
-      description: 'My coding style & preferences guide',
-      mimeType: 'text/markdown',
+      description: "My coding style & preferences guide",
+      mimeType: "text/markdown",
     },
     async () => ({
       contents: [
         {
-          uri: 'style://preferences',
-          mimeType: 'text/markdown',
+          uri: "style://preferences",
+          mimeType: "text/markdown",
           text: formatStyleGuide(),
         },
       ],
@@ -35,20 +35,20 @@ export function createServer(): McpServer {
   );
 
   // Per-category resources
-  for (const cat of ['General', 'Business'] as const) {
+  for (const cat of ["General", "Business"] as const) {
     const key = cat.toLowerCase();
     server.registerResource(
       `coding-style-${key}`,
       `style://${key}`,
       {
-        description: `${cat} coding ${cat === 'Business' ? 'patterns' : 'habits'}`,
-        mimeType: 'text/markdown',
+        description: `${cat} coding ${cat === "Business" ? "patterns" : "habits"}`,
+        mimeType: "text/markdown",
       },
       async () => ({
         contents: [
           {
             uri: `style://${key}`,
-            mimeType: 'text/markdown',
+            mimeType: "text/markdown",
             text: formatStyleGuide(undefined, cat),
           },
         ],
@@ -57,20 +57,20 @@ export function createServer(): McpServer {
   }
 
   // Per-language resources (Language category only)
-  for (const pref of STYLE_PREFERENCES.filter(p => p.category === 'Language')) {
+  for (const pref of STYLE_PREFERENCES.filter(p => p.category === "Language")) {
     const lang = pref.language.toLowerCase();
     server.registerResource(
       `coding-style-${lang}`,
       `style://preferences/${lang}`,
       {
         description: `${pref.language} coding style guide`,
-        mimeType: 'text/markdown',
+        mimeType: "text/markdown",
       },
       async () => ({
         contents: [
           {
             uri: `style://preferences/${lang}`,
-            mimeType: 'text/markdown',
+            mimeType: "text/markdown",
             text: formatStyleGuide(pref.language),
           },
         ],
@@ -83,34 +83,34 @@ export function createServer(): McpServer {
   // ------------------------------------------------------------------
 
   server.registerTool(
-    'get_style_guidelines',
+    "get_style_guidelines",
     {
       description:
-        'Get coding style guidelines — filter by language, category, or both. Returns everything if no filter is specified.',
+        "Get coding style guidelines — filter by language, category, or both. Returns everything if no filter is specified.",
       inputSchema: z.object({
         language: z
           .string()
           .optional()
           .describe(
-            'Filter by language (e.g. TypeScript, React, Vue, Node.js, Go, CSS)',
+            "Filter by language (e.g. TypeScript, React, Vue, Node.js, Go, CSS)",
           ),
         category: z
-          .enum(['General', 'Business', 'Language'])
+          .enum(["General", "Business", "Language"])
           .optional()
           .describe(
-            'Filter by category: General (coding habits), Business (logic patterns), Language (language-specific rules)',
+            "Filter by category: General (coding habits), Business (logic patterns), Language (language-specific rules)",
           ),
       }),
     },
     async ({ language, category }) => ({
-      content: [{ type: 'text', text: formatStyleGuide(language, category) }],
+      content: [{ type: "text", text: formatStyleGuide(language, category) }],
     }),
   );
 
   server.registerTool(
-    'list_categories',
+    "list_categories",
     {
-      description: 'List all style categories and their languages',
+      description: "List all style categories and their languages",
     },
     async () => {
       const grouped = new Map<string, string[]>();
@@ -123,30 +123,30 @@ export function createServer(): McpServer {
       const lines: string[] = [];
       for (const [cat, langs] of grouped) {
         lines.push(`# ${cat}`);
-        lines.push(langs.map(l => `  - ${l}`).join('\n'));
+        lines.push(langs.map(l => `  - ${l}`).join("\n"));
       }
-      return { content: [{ type: 'text', text: lines.join('\n\n') }] };
+      return { content: [{ type: "text", text: lines.join("\n\n") }] };
     },
   );
 
   server.registerTool(
-    'status',
+    "status",
     {
-      description: 'Check the MCP server status and configuration',
+      description: "Check the MCP server status and configuration",
     },
     async () => ({
       content: [
         {
-          type: 'text',
+          type: "text",
           text: [
-            '✅ style-assistant MCP server is running',
+            "✅ style-assistant MCP server is running",
             `📋 ${STYLE_PREFERENCES.length} rule sets configured`,
-            `📐 ${STYLE_PREFERENCES.filter(p => p.category === 'General').length} general habits`,
-            `🏢 ${STYLE_PREFERENCES.filter(p => p.category === 'Business').length} business patterns`,
-            `🔧 ${STYLE_PREFERENCES.filter(p => p.category === 'Language').length} language-specific`,
+            `📐 ${STYLE_PREFERENCES.filter(p => p.category === "General").length} general habits`,
+            `🏢 ${STYLE_PREFERENCES.filter(p => p.category === "Business").length} business patterns`,
+            `🔧 ${STYLE_PREFERENCES.filter(p => p.category === "Language").length} language-specific`,
             `📦 Version: 1.0.0`,
             `🌐 Protocol: MCP 2026-07-28 (Streamable HTTP)`,
-          ].join('\n'),
+          ].join("\n"),
         },
       ],
     }),
@@ -157,36 +157,36 @@ export function createServer(): McpServer {
   // ------------------------------------------------------------------
 
   server.registerPrompt(
-    'code-review',
+    "code-review",
     {
-      description: 'Review code against my coding style',
+      description: "Review code against my coding style",
       argsSchema: z.object({
-        code: z.string().describe('The code snippet to review'),
+        code: z.string().describe("The code snippet to review"),
         language: z
           .string()
           .optional()
-          .describe('Programming language (TypeScript / React / Python, etc.)'),
+          .describe("Programming language (TypeScript / React / Python, etc.)"),
       }),
     },
     async ({ code, language }) => ({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: {
-            type: 'text',
+            type: "text",
             text: [
-              'Please review this code against my coding style guide:',
-              '',
+              "Please review this code against my coding style guide:",
+              "",
               formatStyleGuide(language),
-              '',
-              '---',
-              'Code to review:',
-              '```',
+              "",
+              "---",
+              "Code to review:",
+              "```",
               code,
-              '```',
-              '',
+              "```",
+              "",
               "Point out what doesn't match the style guide and suggest improvements.",
-            ].join('\n'),
+            ].join("\n"),
           },
         },
       ],
