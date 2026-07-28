@@ -18,14 +18,57 @@ import * as z from "zod/v4";
 // ============================================================================
 
 interface StylePreference {
+  category: 'General' | 'Business' | 'Language';
   language: string;
   rules: string[];
 }
 
+const CATEGORY_LABELS: Record<StylePreference['category'], string> = {
+  General: '📐 General Coding Habits',
+  Business: '🏢 Business Logic Patterns',
+  Language: '🔧 Language-Specific Rules',
+};
+
 const STYLE_PREFERENCES: StylePreference[] = [
-  // ── General ─────────────────────────────────────────────────────────
+  // ==================================================================
+  // 📐 General Coding Habits
+  // ==================================================================
   {
-    language: "General",
+    category: 'General',
+    language: 'Git & Workflow',
+    rules: [
+      "Commit format: (type)[scope]: description",
+      "  type: feat | fix | refactor | chore | docs | style | test | perf",
+      "  scope: the feature or module name (e.g. (feat)[auth]: add login flow)",
+      "  Always work on a feature branch, but the commit message itself doesn't need to name the branch",
+      "  Keep commits atomic — one logical change per commit",
+    ],
+  },
+  {
+    category: 'General',
+    language: 'Programming Paradigm',
+    rules: [
+      "Prefer functional programming style. Avoid OOP (classes, inheritance, this)",
+      "Write closures freely — even for a single local variable, a closure is fine",
+      "Use pure functions where possible (no side effects)",
+      "Prefer immutable data — use spread / structuredClone instead of mutation",
+      "Compose small functions over large monolithic ones",
+    ],
+  },
+  {
+    category: 'General',
+    language: 'Type Discipline',
+    rules: [
+      "Always use TypeScript over JavaScript for any serious project",
+      "Write concrete types. Avoid `any` at all costs",
+      "Priority when choosing a type representation: union types > enums > plain string",
+      "Prefer `interface` over `type` (use `type` for unions and mapped types)",
+      "Use `unknown` instead of `any`, then narrow with type guards",
+    ],
+  },
+  {
+    category: 'General',
+    language: 'Code Craft',
     rules: [
       "Readability over micro-performance",
       "Keep functions short with a single responsibility",
@@ -37,31 +80,55 @@ const STYLE_PREFERENCES: StylePreference[] = [
       "Single quotes for strings",
       "camelCase for variables and functions",
       "PascalCase for classes, interfaces, and types",
-      "kebab-case for CSS class selectors",
+      "kebab-case for CSS class selectors in HTML/CSS",
       "snake_case for static file names (images, configs, etc.)",
     ],
   },
 
-  // ── TypeScript / JavaScript ─────────────────────────────────────────
+  // ==================================================================
+  // 🏢 Business Logic Patterns
+  // ==================================================================
   {
-    language: "TypeScript",
+    category: 'Business',
+    language: 'Data & Validation',
     rules: [
-      "Prefer interface over type (use type for unions or mapped types)",
-      "Enable strict mode in tsconfig",
-      "Use async/await, avoid raw Promise chains",
-      "Use Zod / Standard Schema for external input validation",
-      "Export named functions (for utilities, helpers, APIs)",
-      "Use `import type` for type-only imports",
-      "No `any` — prefer `unknown` and narrow with guards",
-      "Use `const` assertions for literal types",
+      "Use Zod (or Standard Schema) to validate all external inputs at the boundary",
+      "Parse, don't validate — transform raw input into typed, validated structures",
+      "Keep business logic decoupled from the framework / transport layer",
+      "Prefer pure data flow: input → validate → transform → output",
+      "Avoid business logic in components or route handlers — extract into services",
+    ],
+  },
+  {
+    category: 'Business',
+    language: 'Error Handling',
+    rules: [
+      "Use a Result / Either pattern instead of throwing exceptions for expected failures",
+      "Centralized error handler for unexpected errors (catch at the boundary)",
+      "Return user-friendly error messages, never leak internals",
+      "Log errors with enough context to debug, but no sensitive data",
     ],
   },
 
-  // ── React / Next.js ─────────────────────────────────────────────────
+  // ==================================================================
+  // 🔧 Language-Specific Rules
+  // ==================================================================
   {
-    language: "React",
+    category: 'Language',
+    language: 'TypeScript',
     rules: [
-      "Prefer function components + Hooks",
+      "Enable strict mode in tsconfig",
+      "Use async/await, avoid raw Promise chains",
+      "Export named functions (for utilities, helpers, APIs)",
+      "Use `import type` for type-only imports",
+      "Use `const` assertions for literal types",
+    ],
+  },
+  {
+    category: 'Language',
+    language: 'React',
+    rules: [
+      "Prefer function components + Hooks. Avoid class components",
       "Keep components pure/presentational, extract logic into custom Hooks",
       "Use Tailwind CSS, avoid CSS-in-JS",
       "Define Props with interface, place at the top of the file",
@@ -70,10 +137,9 @@ const STYLE_PREFERENCES: StylePreference[] = [
       "'use client' only when interactivity is needed",
     ],
   },
-
-  // ── Vue / Nuxt ──────────────────────────────────────────────────────
   {
-    language: "Vue",
+    category: 'Language',
+    language: 'Vue',
     rules: [
       "Use Composition API with <script setup lang='ts'>",
       "Default import for components",
@@ -83,22 +149,20 @@ const STYLE_PREFERENCES: StylePreference[] = [
       "Single-File Components (.vue) for all components",
     ],
   },
-
-  // ── SolidJS ─────────────────────────────────────────────────────────
   {
-    language: "SolidJS",
+    category: 'Language',
+    language: 'SolidJS',
     rules: [
       "Use signals and effects, avoid classes and 'this'",
       "Prefer `createSignal` over mutable state",
-      "Use `For` / `Show` control flow components instead of .map() / &&",
+      "Use `<For>` / `<Show>` control flow components instead of .map() / &&",
       "Default import for components",
       "Keep component logic in primitives (custom hooks)",
     ],
   },
-
-  // ── Astro ───────────────────────────────────────────────────────────
   {
-    language: "Astro",
+    category: 'Language',
+    language: 'Astro',
     rules: [
       "Use `---` frontmatter for server-side logic",
       "Minimal client JS — use client:* directives sparingly",
@@ -106,10 +170,9 @@ const STYLE_PREFERENCES: StylePreference[] = [
       "Prefer `.astro` over `.mdx` for content-heavy pages with custom layout",
     ],
   },
-
-  // ── Node.js / Bun (Hono, Express, Nest) ─────────────────────────────
   {
-    language: "Node.js",
+    category: 'Language',
+    language: 'Node.js',
     rules: [
       "Use Hono for new projects (lightweight, fast, CF Workers compatible)",
       "Organize by feature (not by file type)",
@@ -119,10 +182,9 @@ const STYLE_PREFERENCES: StylePreference[] = [
       "Named imports for utilities and middleware",
     ],
   },
-
-  // ── Go ──────────────────────────────────────────────────────────────
   {
-    language: "Go",
+    category: 'Language',
+    language: 'Go',
     rules: [
       "Use `go fmt` before every commit",
       "Prefer composition over inheritance (interfaces, embedding)",
@@ -131,10 +193,9 @@ const STYLE_PREFERENCES: StylePreference[] = [
       "Keep package scope minimal — export only what's needed",
     ],
   },
-
-  // ── CSS / Tailwind ──────────────────────────────────────────────────
   {
-    language: "CSS",
+    category: 'Language',
+    language: 'CSS',
     rules: [
       "Use Tailwind utility classes as the primary approach",
       "Use CSS Modules for complex custom styles that Tailwind can't cover",
@@ -146,23 +207,45 @@ const STYLE_PREFERENCES: StylePreference[] = [
 ];
 
 // Format style preferences as plain text
-function formatStyleGuide(language?: string): string {
-  const prefs = language
-    ? STYLE_PREFERENCES.filter(
-        p => p.language.toLowerCase() === language.toLowerCase(),
-      )
-    : STYLE_PREFERENCES;
+function formatStyleGuide(
+  language?: string,
+  category?: StylePreference['category'],
+): string {
+  let prefs = STYLE_PREFERENCES;
 
-  if (prefs.length === 0 && language) {
-    return `No style config found for "${language}". Available languages: ${STYLE_PREFERENCES.map(p => p.language).join(", ")}`;
+  if (language) {
+    prefs = prefs.filter(
+      p => p.language.toLowerCase() === language.toLowerCase(),
+    );
+  }
+  if (category) {
+    prefs = prefs.filter(p => p.category === category);
   }
 
-  return prefs
-    .map(section => {
-      const rules = section.rules.map((r, i) => `  ${i + 1}. ${r}`).join("\n");
-      return `## ${section.language}\n${rules}`;
-    })
-    .join("\n\n");
+  if (prefs.length === 0) {
+    const hint = language
+      ? `No style config found for "${language}".`
+      : `No config found for category "${category}".`;
+    return `${hint} Available: ${STYLE_PREFERENCES.map(p => p.language).join(", ")}`;
+  }
+
+  // Group by category
+  const grouped = new Map<StylePreference['category'], StylePreference[]>();
+  for (const pref of prefs) {
+    const list = grouped.get(pref.category) ?? [];
+    list.push(pref);
+    grouped.set(pref.category, list);
+  }
+
+  const parts: string[] = [];
+  for (const [cat, items] of grouped) {
+    parts.push(`# ${CATEGORY_LABELS[cat]}`);
+    for (const item of items) {
+      const rules = item.rules.map((r, i) => `  ${i + 1}. ${r}`).join("\n");
+      parts.push(`## ${item.language}\n${rules}`);
+    }
+  }
+  return parts.join("\n\n");
 }
 
 // ============================================================================
@@ -245,8 +328,45 @@ function createServer(): McpServer {
     }),
   );
 
-  // Per-language style resources
-  for (const pref of STYLE_PREFERENCES) {
+  // Per-category resources
+  server.registerResource(
+    'coding-style-general',
+    'style://general',
+    {
+      description: 'General coding habits',
+      mimeType: 'text/markdown',
+    },
+    async () => ({
+      contents: [
+        {
+          uri: 'style://general',
+          mimeType: 'text/markdown',
+          text: formatStyleGuide(undefined, 'General'),
+        },
+      ],
+    }),
+  );
+
+  server.registerResource(
+    'coding-style-business',
+    'style://business',
+    {
+      description: 'Business logic patterns',
+      mimeType: 'text/markdown',
+    },
+    async () => ({
+      contents: [
+        {
+          uri: 'style://business',
+          mimeType: 'text/markdown',
+          text: formatStyleGuide(undefined, 'Business'),
+        },
+      ],
+    }),
+  );
+
+  // Per-language resources (Language category only)
+  for (const pref of STYLE_PREFERENCES.filter(p => p.category === 'Language')) {
     const lang = pref.language.toLowerCase();
     server.registerResource(
       `coding-style-${lang}`,
@@ -271,38 +391,53 @@ function createServer(): McpServer {
   // Tools
   // ------------------------------------------------------------------
 
-  // Tool 1: Get style guidelines for a language
+  // Tool 1: Get style guidelines
   server.registerTool(
     "get_style_guidelines",
     {
       description:
-        "Get coding style guidelines for a language or framework. Returns all if no language is specified.",
+        "Get coding style guidelines — filter by language, category, or both. Returns everything if no filter is specified.",
       inputSchema: z.object({
         language: z
           .string()
           .optional()
-          .describe("Programming language, e.g. TypeScript, React, Python"),
+          .describe(
+            "Filter by language (e.g. TypeScript, React, Vue, Node.js, Go, CSS)",
+          ),
+        category: z
+          .enum(['General', 'Business', 'Language'])
+          .optional()
+          .describe(
+            "Filter by category: General (coding habits), Business (logic patterns), Language (language-specific rules)",
+          ),
       }),
     },
-    async ({ language }) => ({
-      content: [{ type: "text", text: formatStyleGuide(language) }],
+    async ({ language, category }) => ({
+      content: [{ type: "text", text: formatStyleGuide(language, category) }],
     }),
   );
 
-  // Tool 2: List all configured languages
+  // Tool 2: List all configured categories and languages
   server.registerTool(
-    "list_languages",
+    "list_categories",
     {
-      description: "List all languages with configured coding styles",
+      description: "List all style categories and their languages",
     },
-    async () => ({
-      content: [
-        {
-          type: "text",
-          text: STYLE_PREFERENCES.map(p => `- ${p.language}`).join("\n"),
-        },
-      ],
-    }),
+    async () => {
+      const grouped = new Map<StylePreference['category'], string[]>();
+      for (const pref of STYLE_PREFERENCES) {
+        const list = grouped.get(pref.category) ?? [];
+        list.push(pref.language);
+        grouped.set(pref.category, list);
+      }
+
+      const lines: string[] = [];
+      for (const [cat, langs] of grouped) {
+        lines.push(`${CATEGORY_LABELS[cat]}`);
+        lines.push(langs.map(l => `  - ${l}`).join('\n'));
+      }
+      return { content: [{ type: 'text', text: lines.join('\n\n') }] };
+    },
   );
 
   // Tool 3: Get server status
@@ -317,8 +452,10 @@ function createServer(): McpServer {
           type: "text",
           text: [
             "✅ style-assistant MCP server is running",
-            `📋 ${STYLE_PREFERENCES.length} languages configured`,
-            `🔧 ${STYLE_PREFERENCES.map(p => p.language).join(", ")}`,
+            `📋 ${STYLE_PREFERENCES.length} rule sets configured`,
+            `📐 ${STYLE_PREFERENCES.filter(p => p.category === 'General').length} general habits`,
+            `🏢 ${STYLE_PREFERENCES.filter(p => p.category === 'Business').length} business patterns`,
+            `🔧 ${STYLE_PREFERENCES.filter(p => p.category === 'Language').length} language-specific`,
             `📦 Version: 1.0.0`,
             `🌐 Protocol: MCP 2026-07-28 (Streamable HTTP)`,
           ].join("\n"),
@@ -406,7 +543,12 @@ app.get("/health", (c: Context) => {
     status: "ok",
     server: "style-assistant",
     version: "1.0.0",
-    languages: STYLE_PREFERENCES.map(p => p.language),
+    categories: Object.fromEntries(
+      ['General', 'Business', 'Language'].map(cat => [
+        cat,
+        STYLE_PREFERENCES.filter(p => p.category === cat).map(p => p.language),
+      ]),
+    ),
   });
 });
 
