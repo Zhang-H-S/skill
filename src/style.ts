@@ -1,6 +1,5 @@
 /**
- * Coding style preferences — sourced from real project code at
- * jackpot-crush-fe (Nuxt 3 + TypeScript + UnoCSS)
+ * Coding style preferences — defined by personal habits and preferences
  */
 
 export interface StylePreference {
@@ -36,7 +35,7 @@ export const STYLE_PREFERENCES: StylePreference[] = [
     rules: [
       "Prefer functional programming. Avoid OOP (classes, 'this', inheritance)",
       'Write closures freely — even wrapping a single local variable is fine',
-      "Use pure functions where possible (no side effects). Prefer immutable data (spread / structuredClone)",
+      "Use pure functions where possible. Prefer immutable data (spread / structuredClone)",
       'Compose small functions over large monolithic ones',
     ],
   },
@@ -45,8 +44,7 @@ export const STYLE_PREFERENCES: StylePreference[] = [
     language: 'TypeScript Usage',
     rules: [
       'Always use TypeScript over plain JS for any serious project',
-      "strict: false in tsconfig is acceptable — pragmatism over purity",
-      'Prefer concrete types. `any` is a lazy escape hatch — use it sparingly and only when the shape is truly dynamic',
+      'Prefer concrete types. `any` is a lazy escape hatch — use it sparingly',
       'Priority for type representation: union types > enums > plain string',
       'Prefer `interface` over `type` (use `type` for unions and mapped types)',
     ],
@@ -57,50 +55,26 @@ export const STYLE_PREFERENCES: StylePreference[] = [
     rules: [
       'Readability over micro-performance. Code is written for humans first',
       'Keep functions focused. Extract logic when it gets too long',
-      'Use meaningful names. Chinese comments are fine for internal project context',
+      'Use meaningful names. Chinese comments are fine when context requires',
       '2 spaces for indentation. Semicolons required. Trailing commas everywhere',
-      'Double quotes for strings (both in TS and template attributes)',
+      'Double quotes for strings',
       'Single parameter arrow functions: omit parens (e.g. msg => console.log(msg))',
       'camelCase for variables and functions. PascalCase for classes, interfaces, types, component files',
       'kebab-case for CSS class selectors. snake_case for static file names (images, configs)',
-      'Barrel exports: use index.ts with `export * from "./module"` pattern',
     ],
   },
 
   // ==================================================================
-  // 🏢 Business Logic Patterns
+  // 🏢 Business Logic Patterns (placeholder — add your own)
   // ==================================================================
   {
     category: 'Business',
-    language: 'Project Architecture',
+    language: 'General Approach',
     rules: [
-      'Organize by file type at top level (components/, pages/, utils/, api/, stores/, types/)',
-      'Within each directory, group by business domain in subdirectories (e.g. components/shop/, pages/main/)',
-      'Use barrel exports (index.ts) to consolidate related modules',
-      'Keep reusable logic in utils/ instead of composables/ — auto-imported via nuxt.config imports.dirs',
-    ],
-  },
-  {
-    category: 'Business',
-    language: 'API Layer',
-    rules: [
-      'Create a shared $fetch instance with baseURL for all API calls',
-      'Handle global network errors in the instance interceptor with a toast/message',
-      'Wrap each API endpoint in a typed function in service/api/ (e.g. api/token.ts)',
-      'GET requests use params, POST/PUT use body',
-      'API responses can be typed loosely — only type what you actually use',
-      'Use // @ts-ignore for truly unstable API fields (legacy API compatibility)',
-    ],
-  },
-  {
-    category: 'Business',
-    language: 'Error Handling',
-    rules: [
-      'Global toast for common network errors (via interceptor)',
-      'Local .catch() for specific error recovery (e.g. track failure event, log to server)',
-      'Use .catch(e => console.log(e)) for simple logging in utility fetches',
-      'Use .finally() for cleanup (reset loading state)',
-      'Send detailed failure reports to server for payment-critical flows',
+      'Keep business logic decoupled from the framework / transport layer',
+      'Prefer pure data flow: input → validate → transform → output',
+      'Avoid business logic in components or route handlers — extract into services',
+      'Handle errors explicitly. Global handler for common cases, local catch for specific recovery',
     ],
   },
 
@@ -112,20 +86,13 @@ export const STYLE_PREFERENCES: StylePreference[] = [
     language: 'Vue / Nuxt',
     rules: [
       'Use Composition API with <script setup lang="ts">. No Options API',
-      'SFC order: <template> → <script lang="ts" setup> → <style lang="scss" scoped>',
-      'Script order: imports → auto-imported hooks → ref/reactive → defineProps/emits → computed/watch → functions → lifecycle → page meta',
+      'SFC order: <template> → <script setup> → <style scoped>',
       'Use `defineProps<{ prop: Type }>()` with inline type literal for props',
-      'Use `defineEmits(["event"])` with array string for simple emits, or type syntax `(e: "name", p: T): void` for complex ones',
-      'Emit camelCase in child, listen kebab-case in parent (@close, @payment)',
       'Use storeToRefs() to destructure Pinia state, call actions directly on store',
       'Pinia stores: use Setup Store syntax (defineStore("name", () => { ... }))',
-      'Auto-imported: useI18n(), useRoute(), useRouter(), useHead(), Pinia stores — no explicit imports if configured',
-      'Extract page logic into co-located hooks/ directory, create an orchestrator hook that composes sub-hooks',
-      'Naming: useXxx for composables, plain names for configs/constants (priceConfig.ts, loadImg.ts)',
-      'Prefer @/ path alias for all imports (e.g. @/store/page, @/service/api/token)',
-      'Use $t("key") for i18n. Language-aware images via objects { zh, en, ja } + pickImg()',
-      'Template stays declarative: avoid complex logic, use computed. v-if/v-for with :key always',
-      'Use Promise .then() chains as the primary async pattern over async/await',
+      'Use `@/` path alias for project imports',
+      'Use `$t("key")` for i18n',
+      'Template stays declarative: avoid complex logic, use computed',
     ],
   },
   {
@@ -134,7 +101,7 @@ export const STYLE_PREFERENCES: StylePreference[] = [
     rules: [
       'Prefer function components + Hooks. Avoid class components',
       'Keep components pure/presentational, extract logic into custom hooks',
-      'Use Tailwind, avoid CSS-in-JS',
+      'Use Tailwind 4, avoid CSS-in-JS',
       'Define Props with interface, place at the top of the file',
       'Default import for components, named import for hooks/utils',
     ],
@@ -146,36 +113,8 @@ export const STYLE_PREFERENCES: StylePreference[] = [
       'Use Tailwind 4 utility classes in templates as the primary approach',
       'Configure Tailwind via CSS (@import "tailwindcss") rather than JS config file',
       'Use scoped SCSS for complex custom styles that utilities cannot cover',
-      'PC/Mobile responsive: separate view files (pc/ vs mobile/), or same component with .pc/.mobile CSS class switching',
-      'Use BEM-like naming for CSS classes: .tokenItem, .header, .board, .btn',
-      'CSS background-image for most UI elements (buttons, badges, panels, borders) — not CSS-drawn',
-      'Text stroke effects via CSS pseudo-elements and data-text attribute',
-      'Use vw for responsive sizing. Scoped styles with nested selectors',
-      'Avoid !important — use more specific selectors instead',
-      'Language/device style overrides: .pc_zh, .pc_en, .mobile_ja naming convention',
-    ],
-  },
-  {
-    category: 'Language',
-    language: 'PC/Mobile Architecture',
-    rules: [
-      'Separate view files for PC and Mobile (tokenStorePC.vue / tokenStoreMobile.vue)',
-      'Keep all hooks/composables shared — never split by device',
-      'Component split: share if CSS-only differences, split into PC/Mobile versions if structure differs substantially',
-      'Image resources: separate loadImg.ts per device (pc/loadImg.ts, mobile/loadImg.ts)',
-      'Use orchestrator hook pattern: a main useXxx() that composes smaller useXxx() sub-hooks',
-      'No @media queries — use device-based route dispatching instead',
-      'Organize components by feature: modals/dailyGift/, modals/pass/, carousel/, tokenItem/',
-    ],
-  },
-  {
-    category: 'Language',
-    language: 'Astro',
-    rules: [
-      'Use `---` frontmatter for server-side logic',
-      'Minimal client JS — use client:* directives sparingly',
-      'Colocate components with their Astro pages when possible',
-      'Prefer `.astro` over `.mdx` for content-heavy pages with custom layout',
+      'PC/Mobile responsive: separate view files (pc/ vs mobile/) or component switching via CSS class',
+      'Use vw / rem for responsive sizing. Avoid !important',
     ],
   },
   {
@@ -187,7 +126,6 @@ export const STYLE_PREFERENCES: StylePreference[] = [
       'Use middleware for cross-cutting concerns (auth, logging, validation)',
       'Handle all errors through a centralized error handler',
       'Use environment variables for all configuration',
-      'Named imports for utilities and middleware',
     ],
   },
   {
