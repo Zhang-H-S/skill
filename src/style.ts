@@ -3,15 +3,15 @@
  */
 
 export interface StylePreference {
-  category: 'General' | 'Business' | 'Language';
+  category: "General" | "Business" | "Language";
   language: string;
   rules: string[];
 }
 
-export const CATEGORY_LABELS: Record<StylePreference['category'], string> = {
-  General: '📐 General Coding Habits',
-  Business: '🏢 Business Logic Patterns',
-  Language: '🔧 Language-Specific Rules',
+export const CATEGORY_LABELS: Record<StylePreference["category"], string> = {
+  General: "📐 General Coding Habits",
+  Business: "🏢 Business Logic Patterns",
+  Language: "🔧 Language-Specific Rules",
 };
 
 export const STYLE_PREFERENCES: StylePreference[] = [
@@ -19,48 +19,48 @@ export const STYLE_PREFERENCES: StylePreference[] = [
   // 📐 General Coding Habits
   // ==================================================================
   {
-    category: 'General',
-    language: 'Git & Workflow',
+    category: "General",
+    language: "Git & Workflow",
     rules: [
       "Commit format: (type)[scope]: description",
       "  type: feat | fix | refactor | chore | docs | style | test | perf",
       "  scope: the feature or module name (e.g. (feat)[auth]: add login flow)",
-      '  Always work on a feature branch, but never name the branch in the commit message itself',
-      '  Keep commits atomic — one logical change per commit',
+      "  Always work on a feature branch, but never name the branch in the commit message itself",
+      "  Keep commits atomic — one logical change per commit",
     ],
   },
   {
-    category: 'General',
-    language: 'Programming Paradigm',
+    category: "General",
+    language: "Programming Paradigm",
     rules: [
       "Prefer functional programming. Avoid OOP (classes, 'this', inheritance)",
-      'Write closures freely — even wrapping a single local variable is fine',
+      "Write closures freely — even wrapping a single local variable is fine",
       "Use pure functions where possible. Prefer immutable data (spread / structuredClone)",
-      'Compose small functions over large monolithic ones',
+      "Compose small functions over large monolithic ones",
     ],
   },
   {
-    category: 'General',
-    language: 'TypeScript Usage',
+    category: "General",
+    language: "TypeScript Usage",
     rules: [
-      'Always use TypeScript over plain JS for any serious project',
-      'Prefer concrete types. `any` is a lazy escape hatch — use it sparingly',
-      'Priority for type representation: union types > enums > plain string',
-      'Prefer `interface` over `type` (use `type` for unions and mapped types)',
+      "Always use TypeScript over plain JS for any serious project",
+      "Prefer concrete types. `any` is a lazy escape hatch — use it sparingly",
+      "Priority for type representation: union types > enums > plain string",
+      "Prefer `interface` over `type` (use `type` for unions and mapped types)",
     ],
   },
   {
-    category: 'General',
-    language: 'Code Craft & Formatting',
+    category: "General",
+    language: "Code Craft & Formatting",
     rules: [
-      'Readability over micro-performance. Code is written for humans first',
-      'Keep functions focused. Extract logic when it gets too long',
-      'Use meaningful names. Chinese comments are fine when context requires',
-      '2 spaces for indentation. Semicolons required. Trailing commas everywhere',
-      'Double quotes for strings',
-      'Single parameter arrow functions: omit parens (e.g. msg => console.log(msg))',
-      'camelCase for variables and functions. PascalCase for classes, interfaces, types, component files',
-      'kebab-case for CSS class selectors. snake_case for static file names (images, configs)',
+      "Readability over micro-performance. Code is written for humans first",
+      "Keep functions focused. Extract logic when it gets too long",
+      "Use meaningful names. Chinese comments are fine when context requires",
+      "2 spaces for indentation. Semicolons required. Trailing commas everywhere",
+      "Double quotes for strings",
+      "Single parameter arrow functions: omit parens (e.g. msg => console.log(msg))",
+      "camelCase for variables and functions. PascalCase for classes, interfaces, types, component files",
+      "kebab-case for CSS class selectors. snake_case for static file names (images, configs)",
     ],
   },
 
@@ -68,13 +68,13 @@ export const STYLE_PREFERENCES: StylePreference[] = [
   // 🏢 Business Logic Patterns (placeholder — add your own)
   // ==================================================================
   {
-    category: 'Business',
-    language: 'General Approach',
+    category: "Business",
+    language: "General Approach",
     rules: [
-      'Keep business logic decoupled from the framework / transport layer',
-      'Prefer pure data flow: input → validate → transform → output',
-      'Avoid business logic in components or route handlers — extract into services',
-      'Handle errors explicitly. Global handler for common cases, local catch for specific recovery',
+      "Keep business logic decoupled from the framework / transport layer",
+      "Prefer pure data flow: input → validate → transform → output",
+      "Avoid business logic in components or route handlers — extract into services",
+      "Handle errors explicitly. Global handler for common cases, local catch for specific recovery",
     ],
   },
 
@@ -82,61 +82,70 @@ export const STYLE_PREFERENCES: StylePreference[] = [
   // 🔧 Language-Specific Rules
   // ==================================================================
   {
-    category: 'Language',
-    language: 'Vue / Nuxt',
+    category: "Language",
+    language: "Vue / Nuxt",
     rules: [
       'Use Composition API with <script setup lang="ts">. No Options API',
-      'SFC order: <template> → <script setup> → <style scoped>',
-      'Use `defineProps<{ prop: Type }>()` with inline type literal for props',
-      'Use storeToRefs() to destructure Pinia state, call actions directly on store',
+      "SFC order: <template> → <script setup> → <style scoped>",
+      "Use `defineProps<{ prop: Type }>()` with inline type literal for props",
+      "Use storeToRefs() to destructure Pinia state, call actions directly on store",
       'Pinia stores: use Setup Store syntax (defineStore("name", () => { ... }))',
-      'Use `@/` path alias for project imports',
+      "Use `@/` path alias for project imports",
       'Use `$t("key")` for i18n',
-      'Template stays declarative: avoid complex logic, use computed',
+      "Template stays declarative: avoid complex logic, use computed",
     ],
   },
   {
-    category: 'Language',
-    language: 'React / Next.js',
+    category: "Language",
+    language: "React",
     rules: [
-      'Prefer function components + Hooks. Avoid class components',
-      'Keep components pure/presentational, extract logic into custom hooks',
-      'Use Tailwind 4, avoid CSS-in-JS',
-      'Define Props with interface, place at the top of the file',
-      'Default import for components, named import for hooks/utils',
+      "Pure function components + Hooks. No class components ever",
+      "Feature-based file organization: component-name/ folder with index.tsx + index.module.scss",
+      "kebab-case for component folder names (chat-section/, user-card/)",
+      "Default export for components, named export for utilities/types/store actions",
+      "Props: inline type annotations directly on destructured params (no separate Props interface)",
+      "Prefer useState + useMemo for local state and derived data",
+      "Use useEffect for side effects (WebSocket init, scroll management, data fetch triggers)",
+      "Use useRef for DOM refs and mutable instance references (socket, scroll container)",
+      "Store: Zustand + Immer, with external action functions (store.setState in standalone functions)",
+      "Async: fetch().then().then() chains over async/await for data fetching",
+      "Centralized types in types/index.ts (interfaces for data, enums for status)",
+      "UI library: Ant Design + @ant-design/icons",
     ],
   },
   {
-    category: 'Language',
-    language: 'Style & CSS',
+    category: "Language",
+    language: "Style & CSS",
     rules: [
-      'Use Tailwind 4 utility classes in templates as the primary approach',
-      'Configure Tailwind via CSS (@import "tailwindcss") rather than JS config file',
-      'Use scoped SCSS for complex custom styles that utilities cannot cover',
-      'PC/Mobile responsive: separate view files (pc/ vs mobile/) or component switching via CSS class',
-      'Use vw / rem for responsive sizing. Avoid !important',
+      "Use Tailwind 4 utility classes as the primary approach for utility-first styling",
+      "Configure Tailwind via CSS (@import \"tailwindcss\")",
+      "For component-specific styles: SCSS Modules (*.module.scss) co-located with the component",
+      "CSS class naming: camelCase in SCSS Modules, imported as `styles.className`",
+      "Use nested SCSS selectors, :global() for overriding UI library internals",
+      "Ant Design or Element Plus for UI component library",
+      "PC/Mobile responsive: separate view files or CSS class switching. Avoid !important",
     ],
   },
   {
-    category: 'Language',
-    language: 'Node.js / Hono',
+    category: "Language",
+    language: "Node.js / Hono",
     rules: [
-      'Use Hono for new projects (lightweight, fast, CF Workers compatible)',
-      'Organize by feature (not by file type)',
-      'Use middleware for cross-cutting concerns (auth, logging, validation)',
-      'Handle all errors through a centralized error handler',
-      'Use environment variables for all configuration',
+      "Use Hono for new projects (lightweight, fast, CF Workers compatible)",
+      "Organize by feature (not by file type)",
+      "Use middleware for cross-cutting concerns (auth, logging, validation)",
+      "Handle all errors through a centralized error handler",
+      "Use environment variables for all configuration",
     ],
   },
   {
-    category: 'Language',
-    language: 'Go',
+    category: "Language",
+    language: "Go",
     rules: [
-      'Use `go fmt` before every commit',
-      'Prefer composition over inheritance (interfaces, embedding)',
-      'Return errors explicitly, avoid panics',
-      'Use `errgroup` for concurrent operations',
-      'Keep package scope minimal — export only what\'s needed',
+      "Use `go fmt` before every commit",
+      "Prefer composition over inheritance (interfaces, embedding)",
+      "Return errors explicitly, avoid panics",
+      "Use `errgroup` for concurrent operations",
+      "Keep package scope minimal — export only what's needed",
     ],
   },
 ];
